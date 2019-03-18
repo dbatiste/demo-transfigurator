@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Component for demo'ing other components.",
   "repository": "https://github.com/dbatiste/demo-transfigurator.git",
-  "main": "index.html",
+  "main": "demo-transfigurator.js",
   "scripts": {
     "lint": "eslint . --ext .js,.html",
     "test": "npm run lint"
