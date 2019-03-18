@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+	<script type="module">
+		import './demo-transfigurator.js';
+	</script>
+	<title>demo-transfigurator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<style>
+		html {
+			color: #2d2d2d;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			font-size: 16px;
+		}
+		h1 {
+			font-size: 1.5rem;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>demo-transfigurator</h1>
+
+	<demo-transfigurator>
+		<div>
+			<button>Do not press this button!</button>
+		</div>
+	</demo-transfigurator>
+
+	<script>
+		document.querySelector('button').addEventListener('click', () => {
+			// eslint-disable-next-line no-console
+			console.log('You are a risk taker.');
+		});
+	</script>
+
+</body>
+</html>

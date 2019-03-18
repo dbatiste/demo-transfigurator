@@ -1,0 +1,27 @@
+{
+  "name": "demo-transfigurator",
+  "version": "0.0.1",
+  "description": "Component for demo'ing other components.",
+  "repository": "https://github.com/dbatiste/demo-transfigurator.git",
+  "main": "index.html",
+  "scripts": {
+    "lint": "eslint . --ext .js,.html",
+    "test": "npm run lint"
+  },
+  "author": "Dave Batiste",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@webcomponents/shadycss": "latest",
+    "@webcomponents/webcomponentsjs": "latest",
+    "babel-eslint": "latest",
+    "eslint": "latest",
+    "eslint-config-brightspace": "latest",
+    "eslint-plugin-html": "latest",
+    "eslint-plugin-lit": "latest",
+    "polymer-cli": "latest"
+  },
+  "dependencies": {
+    "lit-element": "latest",
+    "prismjs": "latest"
+  }
+}
