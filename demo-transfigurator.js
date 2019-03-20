@@ -53,11 +53,11 @@ export class DemoTransfigurator extends LitElement {
 				scriptIndent = l.match(/^(\s*)/)[0].length;
 				return l;
 			} else if (l.indexOf('</script>') > -1) {
-				let nl = ' '.repeat(scriptIndent) + l;
+				let nl = this._repeat(' ', scriptIndent) + l ;
 				scriptIndent = 0;
 				return nl;
 			} else if (scriptIndent) {
-				return ' '.repeat(scriptIndent + 2) + l;
+				return this._repeat(' ', scriptIndent + 2) + l;
 			} else {
 				return l;
 			}
@@ -90,6 +90,12 @@ export class DemoTransfigurator extends LitElement {
 
 	_handleSlotChange(e) {
 		this._updateCode(e.target);
+	}
+
+	_repeat(value, times) {
+		if (!value || !times) return '';
+		if (!''.repeat) return Array(times).join(value); // for IE11
+		return value.repeat(times);
 	}
 
 	_updateCode(slot) {
