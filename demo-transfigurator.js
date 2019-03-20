@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit-element/lit-element.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import { demoTransfiguratorStyles } from './demo-transfigurator-styles.js';
-import { demoTransfiguratorCodeStyles } from './demo-transfigurator-code-styles.js';
+import { demoTransfiguratorCodeStyles } from './demo-transfigurator-code-dark-plus-styles.js';
 import 'prismjs/prism.js';
 
 export class DemoTransfigurator extends LitElement {
@@ -49,13 +49,34 @@ export class DemoTransfigurator extends LitElement {
 		// Convert tabs to spaces and then shift indent, modified from:
 		// https://github.com/PolymerElements/marked-element/blob/master/marked-element.js#L340-359
 		if (!text) return text;
-		var lines = text.replace(/\t/g, '  ').split('\n');
+
+		// fix script whitespace
+		var lines = text.replace(/\t/g, '  ').replace(/<\/script>/g,'\n</script>').replace(/<script>/g,'<script>\n').split('\n');
+		var scriptIndent = 0;
+		lines = lines.map(function(l) {
+			if (l.indexOf('<script>') > -1) {
+				scriptIndent = l.match(/^(\s*)/)[0].length;
+				return l;
+			} else if (l.indexOf('</script>') > -1) {
+				var nl = ' '.repeat(scriptIndent) + l;
+				scriptIndent = 0;
+				return nl;
+			} else if (scriptIndent) {
+				return ' '.repeat(scriptIndent + 2) + l;
+			} else {
+				return l;
+			}
+		});
+
 		var indent = lines.reduce(function(prev, line) {
-			if (/^\s*$/.test(line)) return prev;  // Completely ignore blank lines.
+
+			// completely ignore blank lines
+			if (/^\s*$/.test(line)) return prev;
 
 			var lineIndent = line.match(/^(\s*)/)[0].length;
 			if (prev === null) return lineIndent;
 			return lineIndent < prev ? lineIndent : prev;
+
 		}, null);
 
 		// remove leading or trailing blank lines
@@ -75,7 +96,6 @@ export class DemoTransfigurator extends LitElement {
 			this.shadowRoot.querySelector('code.language-html').innerHTML = '';
 			return;
 		}
-
 		const tempContainer = document.createElement('div');
 		for (var i = 0; i < nodes.length; i++) {
 			tempContainer.appendChild(nodes[i].cloneNode(true));
