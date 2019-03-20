@@ -41,24 +41,19 @@ export class DemoTransfigurator extends LitElement {
 		return html`<pre class="language-html"><code class="language-html">${unsafeHTML(this._codeHTML)}</code></pre>`;
 	}
 
-	_handleSlotChange(e) {
-		this._updateCode(e.target);
-	}
+	_fixCodeWhitespace(text) {
 
-	_unIndent(text) {
-		// Convert tabs to spaces and then shift indent, modified from:
-		// https://github.com/PolymerElements/marked-element/blob/master/marked-element.js#L340-359
 		if (!text) return text;
 
-		// fix script whitespace
-		var lines = text.replace(/\t/g, '  ').replace(/<\/script>/g,'\n</script>').replace(/<script>/g,'<script>\n').split('\n');
-		var scriptIndent = 0;
-		lines = lines.map(function(l) {
+		// fix script whitespace (for some reason brower keeps <script> indent but not the rest)
+		let lines = text.replace(/\t/g, '  ').replace(/<\/script>/g,'\n</script>').replace(/<script>/g,'<script>\n').split('\n');
+		let scriptIndent = 0;
+		lines = lines.map((l) => {
 			if (l.indexOf('<script>') > -1) {
 				scriptIndent = l.match(/^(\s*)/)[0].length;
 				return l;
 			} else if (l.indexOf('</script>') > -1) {
-				var nl = ' '.repeat(scriptIndent) + l;
+				let nl = ' '.repeat(scriptIndent) + l;
 				scriptIndent = 0;
 				return nl;
 			} else if (scriptIndent) {
@@ -67,6 +62,9 @@ export class DemoTransfigurator extends LitElement {
 				return l;
 			}
 		});
+
+		// Shift indent left if possible, modified from:
+		// https://github.com/PolymerElements/marked-element/blob/master/marked-element.js#L340-359
 
 		var indent = lines.reduce(function(prev, line) {
 
@@ -90,6 +88,10 @@ export class DemoTransfigurator extends LitElement {
 		}).join('\n');
 	}
 
+	_handleSlotChange(e) {
+		this._updateCode(e.target);
+	}
+
 	_updateCode(slot) {
 		const nodes = slot.assignedNodes();
 		if (nodes.length === 0) {
@@ -101,7 +103,7 @@ export class DemoTransfigurator extends LitElement {
 			tempContainer.appendChild(nodes[i].cloneNode(true));
 		}
 
-		const html = Prism.highlight(this._unIndent(tempContainer.innerHTML), Prism.languages.html, 'html');
+		const html = Prism.highlight(this._fixCodeWhitespace(tempContainer.innerHTML), Prism.languages.html, 'html');
 		this._codeHTML = html;
 	}
 
