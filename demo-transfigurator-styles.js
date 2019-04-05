@@ -15,6 +15,9 @@ export const demoTransfiguratorStyles = css`
 	:host([no-padding]) .demo-transfigurator-demo {
 		padding: 0;
 	}
+	:host .demo-transfigurator-code {
+		font-size: 16px;
+	}
 	pre[class*="language-"] {
 		margin: 0;
 		padding: 18px;
